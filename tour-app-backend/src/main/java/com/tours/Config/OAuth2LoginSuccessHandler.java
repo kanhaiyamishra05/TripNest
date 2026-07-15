@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,9 @@ import java.io.IOException;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(OAuth2LoginSuccessHandler.class);
+
+    @Value("${app.frontend.url:http://localhost:5173}")
+    private String frontendUrl;
 
     @Autowired
     private JwtService jwtService;
@@ -76,7 +80,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         logger.info("JWT token generated for user: {}", email);
 
         // Build URL with token
-        String redirectUrl = "http://localhost:5173/authSuccess";
+        String redirectUrl = frontendUrl + "/authSuccess";
         String finalRedirectUrl = UriComponentsBuilder.fromUriString(redirectUrl)
                 .queryParam("token", token)
                 .build().toUriString();
