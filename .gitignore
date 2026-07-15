@@ -1,0 +1,17 @@
+# Node / Frontend
+tours_frontend/node_modules/
+tours_frontend/dist/
+tours_frontend/.env
+tours_frontend/.env.local
+
+# Maven / Java Backend
+tour-app-backend/target/
+tour-app-backend/.mvn/wrapper/maven-wrapper.jar
+tour-app-backend/logs/
+
+# IDEs and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

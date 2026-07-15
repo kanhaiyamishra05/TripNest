@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────
+   Global select appearance fix (cross-browser)
+───────────────────────────────────────────────── */
+select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
+}
+select::-ms-expand {
+  display: none !important;
+}
+
+/* ─────────────────────────────────────────────────
+   Dark Mode — html.dark overrides
+   All surfaces use CSS variables so toggling
+   the .dark class on <html> flips the theme.
+───────────────────────────────────────────────── */
+:root {
+  --bg-primary:    #f9fafb;   /* gray-50 */
+  --bg-secondary:  #ffffff;   /* white */
+  --bg-card:       #ffffff;
+  --bg-input:      #ffffff;
+  --text-primary:  #111827;   /* gray-900 */
+  --text-secondary:#6b7280;   /* gray-500 */
+  --text-muted:    #9ca3af;   /* gray-400 */
+  --border-color:  #e5e7eb;   /* gray-200 */
+  --shadow-color:  rgba(0,0,0,0.08);
+  --badge-bg:      #f3f4f6;
+  --badge-text:    #374151;
+}
+
+html.dark {
+  --bg-primary:    #0f172a;   /* slate-900 */
+  --bg-secondary:  #1e293b;   /* slate-800 */
+  --bg-card:       #1e293b;
+  --bg-input:      #334155;   /* slate-700 */
+  --text-primary:  #f1f5f9;   /* slate-100 */
+  --text-secondary:#94a3b8;   /* slate-400 */
+  --text-muted:    #64748b;   /* slate-500 */
+  --border-color:  #334155;
+  --shadow-color:  rgba(0,0,0,0.4);
+  --badge-bg:      #334155;
+  --badge-text:    #e2e8f0;
+}
+
+/* Smooth theme transitions */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+/* Don't transition transforms/opacity (breaks animations) */
+.no-transition, button svg, .animate-spin, .animate-pulse {
+  transition: none !important;
+}
+
+/* ─────────────────────────────────────────────────
+   Dark mode utility classes (used in JSX)
+───────────────────────────────────────────────── */
+.dark-bg-primary    { background-color: var(--bg-primary); }
+.dark-bg-secondary  { background-color: var(--bg-secondary); }
+.dark-bg-card       { background-color: var(--bg-card); }
+.dark-text-primary  { color: var(--text-primary); }
+.dark-text-secondary{ color: var(--text-secondary); }
+.dark-border        { border-color: var(--border-color); }
+
+/* ─────────────────────────────────────────────────
+   Custom Animation Keyframes
+───────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes bounceBadge {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+.animate-fadeIn     { animation: fadeIn 0.35s ease-out both; }
+.animate-slideRight { animation: slideInRight 0.3s ease-out both; }
+.animate-bounceBadge{ animation: bounceBadge 2.5s ease-in-out infinite; }
+
+/* ─────────────────────────────────────────────────
+   Rating Bar
+───────────────────────────────────────────────── */
+.rating-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─────────────────────────────────────────────────
+   Social Proof Badge
+───────────────────────────────────────────────── */
+.social-proof-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────
+   Itinerary Tab Styles
+───────────────────────────────────────────────── */
+.itinerary-day-card {
+  border-left: 3px solid #3b82f6;
+  padding-left: 16px;
+  margin-left: 8px;
+  position: relative;
+}
+.itinerary-day-card::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3b82f6;
+}
+
+/* ─────────────────────────────────────────────────
+   Tab System
+───────────────────────────────────────────────── */
+.tab-btn {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn.active {
+  background: #3b82f6;
+  color: #ffffff;
+}
+.tab-btn:not(.active) {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.tab-btn:not(.active):hover {
+  background: #f3f4f6;
+  color: var(--text-primary);
+}
+
+html.dark .tab-btn:not(.active):hover {
+  background: #334155;
+}
+
+/* ─────────────────────────────────────────────────
+   Global theme utility classes for light/dark override
+   This is extremely helpful for components (like Admin pages)
+   that have hardcoded tailwind bg/text classes.
+───────────────────────────────────────────────── */
+html.dark body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+html.dark .bg-gray-50, 
+html.dark .bg-gray-100 {
+  background-color: var(--bg-primary) !important;
+}
+
+html.dark .bg-white {
+  background-color: var(--bg-secondary) !important;
+}
+
+html.dark .text-gray-900,
+html.dark .text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+html.dark .text-gray-700,
+html.dark .text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+
+html.dark .text-gray-500,
+html.dark .text-gray-400 {
+  color: var(--text-muted) !important;
+}
+
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border {
+  border-color: var(--border-color) !important;
+}
+
+html.dark input, 
+html.dark select, 
+html.dark textarea {
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5) !important;
+}
