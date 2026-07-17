@@ -363,11 +363,12 @@ export const userBook = createAsyncThunk(
 // user confirm booking
 export const confirmBooking = createAsyncThunk(
   "confirmBooking",
-  async ({ bookingId,paymentIntentId}, { rejectWithValue }) => {
+  async ({ bookingId, paymentIntentId }, { rejectWithValue }) => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         `${baseUrl}/customer/confirm-payment/${bookingId}?paymentIntentId=${paymentIntentId}`,
-    {},
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -375,9 +376,9 @@ export const confirmBooking = createAsyncThunk(
           },
         }
       );
-      return response;
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response ? error.response.data : error.message);
     }
   }
 );
