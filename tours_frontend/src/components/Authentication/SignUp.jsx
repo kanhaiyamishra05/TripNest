@@ -46,15 +46,16 @@ const SignUp = () => {
     };
 
     dispatch(userSignUP(credentials)).then((res) => {
-      if (res?.payload?.error) {
-        toast.error(res?.payload?.error || "Registration failed");
+      if (userSignUP.fulfilled.match(res)) {
+        toast.success("Account created successfully! Please sign in.");
+        navigate("/");
+      } else {
+        const errorMsg = res.payload || "Registration failed";
+        toast.error(errorMsg);
         setName("");
         setPassword("");
         setEmail("");
         setContactNumber("");
-      } else {
-        toast.success("Account created successfully! Please sign in.");
-        navigate("/");
       }
     });
   };

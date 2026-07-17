@@ -6,15 +6,13 @@ const token = localStorage.getItem("token");
 // SignUP
 export const userSignUP = createAsyncThunk(
   "userSignUp",
-  async (credintials) => {
+  async (credentials, { rejectWithValue }) => {
     try {
-      const request = await axios.post(`${baseUrl}/auth/signup`, credintials);
-
-      return request;
+      const response = await axios.post(`${baseUrl}/auth/signup`, credentials);
+      return response.data;
     } catch (error) {
-      if (error.status === 403) {
-        return { error: "User already exists!" };
-      }
+      const errorMsg = error.response?.data || error.message || "Registration failed";
+      return rejectWithValue(errorMsg);
     }
   }
 );
