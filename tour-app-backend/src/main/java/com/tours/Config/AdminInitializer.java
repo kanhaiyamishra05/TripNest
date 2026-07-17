@@ -53,6 +53,7 @@ public class AdminInitializer {
         admin.setContactNumber(adminContact);
         admin.setRole("ROLE_ADMIN");
         admin.setEnabled(true);
+        admin.setPasswordSet(true);
 
         userRepo.save(admin);
     }

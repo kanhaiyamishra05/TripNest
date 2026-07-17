@@ -38,6 +38,7 @@ public class UserService {
 
         // Encodes the user's password before saving to ensure it's stored securely
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPasswordSet(true);
         userRepository.save(user);
         logger.info("User successfully registered with email: " + user.getEmail());
     }
@@ -93,6 +94,7 @@ public class UserService {
             throw new UserNotFoundException("User not found with email: " + email);
         }
         user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPasswordSet(true);
         userRepository.save(user);
         logger.info("Password successfully updated for user: " + email);
     }

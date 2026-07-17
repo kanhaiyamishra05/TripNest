@@ -46,6 +46,7 @@ public class Users implements Serializable {
     private String address;
     private String emergencyContactName;
     private String emergencyContactNumber;
+    private boolean passwordSet;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

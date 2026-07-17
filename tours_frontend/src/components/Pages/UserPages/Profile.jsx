@@ -19,7 +19,8 @@ const Profile = () => {
     preferredMeal: "Veg",
     address: "",
     emergencyContactName: "",
-    emergencyContactNumber: ""
+    emergencyContactNumber: "",
+    passwordSet: false
   });
 
   useEffect(() => {
@@ -35,7 +36,8 @@ const Profile = () => {
             preferredMeal: response.preferredMeal || "Veg",
             address: response.address || "",
             emergencyContactName: response.emergencyContactName || "",
-            emergencyContactNumber: response.emergencyContactNumber || ""
+            emergencyContactNumber: response.emergencyContactNumber || "",
+            passwordSet: response.passwordSet || false
           });
         }
         setLoading(false);
@@ -74,6 +76,7 @@ const Profile = () => {
       await dispatch(changeUserPassword(newPassword)).unwrap();
       toast.success("Password updated successfully!");
       setNewPassword("");
+      setProfile(prev => ({ ...prev, passwordSet: true }));
     } catch (error) {
       console.error("Failed to update password", error);
       toast.error(typeof error === "string" ? error : "Failed to update password");
@@ -293,10 +296,14 @@ const Profile = () => {
           <div className="p-6 md:p-10">
             <div className="flex items-center gap-2 mb-4">
               <ShieldAlert className="w-5 h-5 text-indigo-555 dark:text-indigo-400" />
-              <h2 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">Security Settings</h2>
+              <h2 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">
+                {profile.passwordSet ? "Change Password" : "Set Password"}
+              </h2>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
-              Set or update your account password. If you signed in with Google, you can set a password here to allow logging in with email and password directly on other devices.
+              {profile.passwordSet 
+                ? "Update your existing account password to a new one."
+                : "Set a password for your account. If you signed in with Google, you can set a password here to allow logging in with email and password directly on other devices."}
             </p>
             <form onSubmit={handlePasswordChangeSubmit} className="space-y-4 max-w-md">
               <div>
@@ -324,7 +331,7 @@ const Profile = () => {
                     </>
                   ) : (
                     <>
-                      <Check className="w-4 h-4" /> Set Password
+                      <Check className="w-4 h-4" /> {profile.passwordSet ? "Change Password" : "Set Password"}
                     </>
                   )}
                 </button>
