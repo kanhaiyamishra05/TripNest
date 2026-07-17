@@ -652,3 +652,18 @@ export const verifySignupOtp = createAsyncThunk("verifySignupOtp", async ({ phon
     return rejectWithValue(error.response ? error.response.data : error.message);
   }
 });
+
+// change user password
+export const changeUserPassword = createAsyncThunk("changeUserPassword", async (newPassword, { rejectWithValue }) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(`${baseUrl}/auth/profile/password`, { newPassword }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});

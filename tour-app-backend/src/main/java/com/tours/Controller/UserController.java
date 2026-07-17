@@ -153,6 +153,28 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+     }
+
+    @Operation(summary = "Change user password", description = "Allows authenticated users to change or set a password")
+    @PutMapping("/profile/password")
+    public ResponseEntity<?> changePassword(@RequestBody java.util.Map<String, String> request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = getUsername(authentication);
+            if (email == null || email.equals("Unknown User")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
+            }
+            
+            String newPassword = request.get("newPassword");
+            if (newPassword == null || newPassword.length() < 5) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 5 characters long!");
+            }
+            
+            userService.changePassword(email, newPassword);
+            return ResponseEntity.ok(java.util.Map.of("message", "Password updated successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     private String getUsername(Authentication authentication) {

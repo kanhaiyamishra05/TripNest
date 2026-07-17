@@ -86,4 +86,14 @@ public class UserService {
         
         return userRepository.save(user);
     }
+
+    public void changePassword(String email, String newPassword) throws UserNotFoundException {
+        Users user = userRepository.getUserByEmail(email);
+        if (user == null) {
+            throw new UserNotFoundException("User not found with email: " + email);
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        logger.info("Password successfully updated for user: " + email);
+    }
 }

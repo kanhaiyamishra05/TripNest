@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getUserProfile, updateUserProfile } from "../../../Redux/API/API";
+import { getUserProfile, updateUserProfile, changeUserPassword } from "../../../Redux/API/API";
 import { Header, Footer } from "../../Reusable/Banner";
 import { toast } from "sonner";
 import { User, Mail, Phone, BookOpen, Utensils, Home, ShieldAlert, Check, Loader2 } from "lucide-react";
@@ -9,6 +9,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -58,6 +60,25 @@ const Profile = () => {
       toast.error("Failed to save profile details");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handlePasswordChangeSubmit = async (e) => {
+    e.preventDefault();
+    if (!newPassword || newPassword.length < 5) {
+      toast.error("Password must be at least 5 characters long!");
+      return;
+    }
+    setChangingPassword(true);
+    try {
+      await dispatch(changeUserPassword(newPassword)).unwrap();
+      toast.success("Password updated successfully!");
+      setNewPassword("");
+    } catch (error) {
+      console.error("Failed to update password", error);
+      toast.error(typeof error === "string" ? error : "Failed to update password");
+    } finally {
+      setChangingPassword(false);
     }
   };
 
@@ -263,6 +284,51 @@ const Profile = () => {
                 </button>
               </div>
 
+            </form>
+          </div>
+        </div>
+
+        {/* Security / Password Card */}
+        <div className="mt-8 bg-white dark:bg-slate-900/60 backdrop-blur-xl border border-gray-100 dark:border-slate-800 shadow-2xl rounded-3xl overflow-hidden transition-all duration-300">
+          <div className="p-6 md:p-10">
+            <div className="flex items-center gap-2 mb-4">
+              <ShieldAlert className="w-5 h-5 text-indigo-555 dark:text-indigo-400" />
+              <h2 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">Security Settings</h2>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
+              Set or update your account password. If you signed in with Google, you can set a password here to allow logging in with email and password directly on other devices.
+            </p>
+            <form onSubmit={handlePasswordChangeSubmit} className="space-y-4 max-w-md">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="Enter at least 5 characters"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  disabled={changingPassword}
+                  className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-violet-650 hover:from-blue-700 hover:to-violet-755 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+                >
+                  {changingPassword ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" /> Updating Password...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-4 h-4" /> Set Password
+                    </>
+                  )}
+                </button>
+              </div>
             </form>
           </div>
         </div>
