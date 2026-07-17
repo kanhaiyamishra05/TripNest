@@ -115,45 +115,16 @@ public class BookingController {
             double chargeAmount = preliminaryBooking.getFinalAmount() > 0 ? preliminaryBooking.getFinalAmount() : preliminaryBooking.getTotalPrice();
             double chargeAmountInINR = chargeAmount * 83.5;
 
-            // Check if Razorpay keys are placeholders
-            if (razorpayKeyId == null || razorpayKeyId.trim().isEmpty() || razorpayKeyId.contains("your-razorpay") || razorpayKeyId.startsWith("<")) {
-                String mockIntentId = "mock_intent_" + System.currentTimeMillis();
-                return ResponseEntity.ok(Map.of(
-                        "paymentIntentId", mockIntentId,
-                        "bookingId", preliminaryBooking.getBookingId(),
-                        "totalAmount", chargeAmountInINR,
-                        "isMock", true,
-                        "keyId", "rzp_test_mock",
-                        "checkoutUrl", "http://localhost:5173/success?paymentIntentId=" + mockIntentId + "&bookingId=" + preliminaryBooking.getBookingId()
-                ));
-            }
-
-            // Real Razorpay Order Creation
-            RazorpayClient client = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
-
-            JSONObject orderRequest = new JSONObject();
-            // Razorpay expects amount in paise (1 INR = 100 paise)
-            orderRequest.put("amount", (int) Math.round(chargeAmountInINR * 100));
-            orderRequest.put("currency", "INR");
-            orderRequest.put("receipt", "booking_" + preliminaryBooking.getBookingId());
-
-            Order order = client.orders.create(orderRequest);
-            String razorpayOrderId = order.get("id");
-
-            java.util.Map<String, Object> responseMap = new java.util.HashMap<>();
-            responseMap.put("paymentIntentId", razorpayOrderId);
-            responseMap.put("orderId", razorpayOrderId);
-            responseMap.put("keyId", razorpayKeyId);
-            responseMap.put("bookingId", preliminaryBooking.getBookingId());
-            responseMap.put("totalAmount", chargeAmountInINR);
-            responseMap.put("amount", (int) Math.round(chargeAmountInINR * 100));
-            responseMap.put("currency", "INR");
-            responseMap.put("customerName", loggedInUser.getName() != null ? loggedInUser.getName() : "Customer");
-            responseMap.put("customerEmail", loggedInUser.getEmail());
-            responseMap.put("customerContact", loggedInUser.getContactNumber() != null ? loggedInUser.getContactNumber() : "9999999999");
-            responseMap.put("isMock", false);
-
-            return ResponseEntity.ok(responseMap);
+            // Direct booking bypasses Razorpay completely
+            String mockIntentId = "mock_intent_" + System.currentTimeMillis();
+            return ResponseEntity.ok(Map.of(
+                    "paymentIntentId", mockIntentId,
+                    "bookingId", preliminaryBooking.getBookingId(),
+                    "totalAmount", chargeAmountInINR,
+                    "isMock", true,
+                    "keyId", "rzp_test_mock",
+                    "checkoutUrl", "/success?paymentIntentId=" + mockIntentId + "&bookingId=" + preliminaryBooking.getBookingId()
+            ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", e.getMessage()));
