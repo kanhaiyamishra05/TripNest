@@ -34,13 +34,21 @@ public class UserController {
 
     @Operation(summary = "Register a new user", description = "Allows users to sign up with their details")
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody Users user) throws Exception {
-        if (!user.isEnabled()) { // Assuming `enabled` is a boolean field in the Users class
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Please agree to the terms and conditions");
+    public ResponseEntity<String> registerUser(@Valid @RequestBody Users user) {
+        try {
+            if (!user.isEnabled()) { // Assuming `enabled` is a boolean field in the Users class
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Please agree to the terms and conditions");
+            }
+            userService.register(user);
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (Exception e) {
+            String message = e.getMessage();
+            if (e.getCause() != null) {
+                message = e.getCause().getMessage();
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-        userService.register(user);
-        return ResponseEntity.ok("User registered successfully!");
     }
 
     @Operation(summary = "Login user", description = "Authenticate user and return a JWT token")
