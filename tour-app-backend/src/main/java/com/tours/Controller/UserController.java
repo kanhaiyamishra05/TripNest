@@ -43,11 +43,7 @@ public class UserController {
             userService.register(user);
             return ResponseEntity.ok("User registered successfully!");
         } catch (Exception e) {
-            String message = e.getMessage();
-            if (e.getCause() != null) {
-                message = e.getCause().getMessage();
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getFriendlyErrorMessage(e));
         }
     }
 
@@ -151,16 +147,7 @@ public class UserController {
             Users updatedUser = userService.updateProfile(email, profileDetails);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
-            String message = e.getMessage();
-            String rootCause = e.getCause() != null ? e.getCause().getMessage() : "";
-            
-            if ((message != null && message.contains("contact_number")) || (rootCause != null && rootCause.contains("contact_number"))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Phone number is already in use by another account!");
-            }
-            if ((message != null && message.contains("email")) || (rootCause != null && rootCause.contains("email"))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use by another account!");
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getFriendlyErrorMessage(e));
         }
      }
 
@@ -182,7 +169,7 @@ public class UserController {
             userService.changePassword(email, newPassword);
             return ResponseEntity.ok(java.util.Map.of("message", "Password updated successfully!"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getFriendlyErrorMessage(e));
         }
     }
 
@@ -195,5 +182,28 @@ public class UserController {
             return ((UserDetails) principal).getUsername();
         }
         return principal.toString();
+    }
+
+    private String getFriendlyErrorMessage(Exception e) {
+        String message = e.getMessage();
+        String rootCause = e.getCause() != null ? e.getCause().getMessage() : "";
+        
+        String combined = (message != null ? message : "") + " | " + (rootCause != null ? rootCause : "");
+        combined = combined.toLowerCase();
+        
+        if (combined.contains("contact_number") || combined.contains("contactnumber")) {
+            return "Phone number is already in use by another account!";
+        }
+        if (combined.contains("email")) {
+            return "Email is already in use by another account!";
+        }
+        if (combined.contains("duplicate key")) {
+            return "A user with the same email or phone number already exists!";
+        }
+        if (combined.contains("constraint") || combined.contains("violates")) {
+            return "Database restriction error. Please check your inputs!";
+        }
+        
+        return message != null ? message : "An unexpected error occurred.";
     }
 }
