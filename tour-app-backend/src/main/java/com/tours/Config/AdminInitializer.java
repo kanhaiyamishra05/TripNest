@@ -35,6 +35,14 @@ public class AdminInitializer {
 
     @PostConstruct
     public void createDefaultAdmin() {
+        // Add missing password_set column to users table if not exists
+        try {
+            jdbcTemplate.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS password_set boolean DEFAULT false");
+            jdbcTemplate.execute("UPDATE users SET password_set = true WHERE password_set IS NULL");
+        } catch (Exception e) {
+            // Ignore if fails
+        }
+
         // Drop outdated check constraint for PaymentStatus enum to allow CANCELLED status
         try {
             jdbcTemplate.execute("ALTER TABLE booking DROP CONSTRAINT IF EXISTS booking_payment_status_check");
