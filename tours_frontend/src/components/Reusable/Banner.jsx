@@ -388,14 +388,14 @@ const Header = () => {
         </div>
 
         {/* Right Controls */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-1.5 sm:space-x-3">
 
           {/* ── Currency Switcher ── */}
           {showDropdown && (
             <div ref={currencyRef} className="relative">
               <button
                 onClick={() => setIsCurrencyOpen((v) => !v)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-semibold transition-all backdrop-blur-sm border border-white/20"
+                className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs sm:text-sm font-semibold transition-all backdrop-blur-sm border border-white/20"
                 title="Switch currency"
               >
                 <DollarSign className="w-3.5 h-3.5" />
@@ -404,7 +404,7 @@ const Header = () => {
               </button>
 
               {isCurrencyOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white text-gray-800 shadow-xl rounded-xl overflow-hidden border border-gray-100 animate-fadeIn">
+                <div className="absolute right-0 mt-2 w-32 bg-white text-gray-800 shadow-xl rounded-xl overflow-hidden border border-gray-100 animate-fadeIn z-50">
                   {Object.entries(EXCHANGE_RATES).map(([code, info]) => (
                     <button
                       key={code}
@@ -431,7 +431,7 @@ const Header = () => {
           {showDropdown && userRole === "ROLE_CUSTOMER" && (
             <button
               onClick={() => navigate("/user/wishlist")}
-              className="relative w-9 h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 transition-all text-white group"
+              className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 transition-all text-white group"
               title="View Wishlist"
             >
               <Heart className="w-4.5 h-4.5 text-red-500 fill-red-500 group-hover:scale-110 transition-transform" />
@@ -448,7 +448,7 @@ const Header = () => {
             <div ref={notificationRef} className="relative">
               <button
                 onClick={() => setIsNotificationOpen((v) => !v)}
-                className={`relative w-9 h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 transition-all text-white group ${
+                className={`relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 transition-all text-white group ${
                   unreadCount > 0 ? "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-950 animate-pulse" : ""
                 }`}
                 title="Notifications"
@@ -581,12 +581,12 @@ const Header = () => {
           <button
             onClick={toggleTheme}
             title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 transition-all"
+            className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 transition-all"
           >
             {isDark ? (
-              <Sun className="w-4.5 h-4.5 text-yellow-300" />
+              <Sun className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-yellow-300" />
             ) : (
-              <Moon className="w-4.5 h-4.5 text-white" />
+              <Moon className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
             )}
           </button>
 
@@ -594,15 +594,18 @@ const Header = () => {
           {showDropdown && (
             <div ref={dropdownRef} className="relative">
               <div
-                className="flex items-center hover:text-blue-300 transition-colors cursor-pointer"
+                className="flex items-center hover:text-blue-300 transition-colors cursor-pointer text-xs sm:text-sm"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
                 {userRole === "ROLE_ADMIN" ? (
-                  "Admin"
+                  <span className="flex items-center gap-1 bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/20">
+                    <CircleUserRound className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-indigo-400" />
+                    <span className="hidden sm:inline">Admin</span>
+                  </span>
                 ) : (
-                  <CircleUserRound className="size-7" />
+                  <CircleUserRound className="w-7 h-7 sm:w-8 sm:h-8" />
                 )}
-                <ChevronDown className="ml-2 w-4 h-4" />
+                <ChevronDown className="ml-1 w-3 h-3 sm:ml-2 sm:w-4 sm:h-4" />
               </div>
 
               {isDropdownOpen && (

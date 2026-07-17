@@ -144,7 +144,7 @@ const Chatbot = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full px-5 py-3.5 shadow-2xl flex items-center gap-2.5 transition-all duration-300 transform hover:scale-105 active:scale-95 group relative"
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full p-3.5 sm:px-5 sm:py-3.5 shadow-2xl flex items-center gap-2.5 transition-all duration-300 transform hover:scale-105 active:scale-95 group relative"
           style={{
             boxShadow: "0 10px 30px -5px rgba(79, 70, 229, 0.4)",
           }}
@@ -153,8 +153,8 @@ const Chatbot = () => {
           {/* Pulse Glow Effect Ring */}
           <span className="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping group-hover:animate-none opacity-75"></span>
           
-          <Bot className="w-5 h-5 text-white animate-pulse" />
-          <span className="text-xs font-bold tracking-wide uppercase select-none">Ask TripNest AI</span>
+          <Bot className="w-5 h-5 text-white" />
+          <span className="text-xs font-bold tracking-wide uppercase select-none hidden sm:inline">Ask TripNest AI</span>
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>

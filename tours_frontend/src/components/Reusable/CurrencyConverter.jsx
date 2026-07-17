@@ -47,15 +47,15 @@ const CurrencyConverter = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full px-5 py-3.5 shadow-2xl flex items-center gap-2.5 transition-all duration-300 transform hover:scale-105 active:scale-95 group relative"
+          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full p-3.5 sm:px-5 sm:py-3.5 shadow-2xl flex items-center gap-2.5 transition-all duration-300 transform hover:scale-105 active:scale-95 group relative"
           style={{ boxShadow: "0 10px 30px -5px rgba(16, 185, 129, 0.4)" }}
           title="Live Travel Currency Converter"
         >
           {/* Subtle outer glow ping */}
           <span className="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping group-hover:animate-none opacity-75"></span>
           
-          <Coins className="w-5 h-5 text-white animate-pulse" />
-          <span className="text-xs font-bold tracking-wide uppercase select-none">Converter</span>
+          <Coins className="w-5 h-5 text-white" />
+          <span className="text-xs font-bold tracking-wide uppercase select-none hidden sm:inline">Converter</span>
         </button>
       )}
 
