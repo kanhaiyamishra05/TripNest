@@ -46,14 +46,18 @@ public class UserController {
     @Operation(summary = "Login user", description = "Authenticate user and return a JWT token")
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody Users loginUser) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
+        try {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
 
-        if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(loginUser.getEmail());
-            return ResponseEntity.ok(token); // Return the token to the client
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+            if (authentication.isAuthenticated()) {
+                String token = jwtService.generateToken(loginUser.getEmail());
+                return ResponseEntity.ok(token); // Return the token to the client
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Email or Password");
         }
     }
 
