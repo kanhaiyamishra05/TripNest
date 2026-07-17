@@ -6,6 +6,13 @@ The system ensures secure and efficient data handling for destinations, lodging,
 
 ---
 
+### 🌐 Live Deployments
+*   **Live Web Application (Vercel)**: [https://tripnest-tours.vercel.app](https://tripnest-tours.vercel.app)
+*   **Live REST API (Render)**: [https://tripnest-backend-xakc.onrender.com](https://tripnest-backend-xakc.onrender.com)
+*   **API Documentation (Swagger UI)**: [https://tripnest-backend-xakc.onrender.com/swagger-ui/index.html](https://tripnest-backend-xakc.onrender.com/swagger-ui/index.html)
+
+---
+
 ## 🚀 Key Features
 
 ### 👤 Customer Features
@@ -126,5 +133,5 @@ CREATE DATABASE "TripNestDB";
 
 ## 📖 API Documentation & Testing
 
-- **Swagger UI**: Interactive API documentation is available at:
-  `http://localhost:8080/swagger-ui/index.html`
+- **Local Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
+- **Live Swagger UI**: [https://tripnest-backend-xakc.onrender.com/swagger-ui/index.html](https://tripnest-backend-xakc.onrender.com/swagger-ui/index.html)
