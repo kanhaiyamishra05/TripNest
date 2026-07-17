@@ -151,7 +151,16 @@ public class UserController {
             Users updatedUser = userService.updateProfile(email, profileDetails);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            String message = e.getMessage();
+            String rootCause = e.getCause() != null ? e.getCause().getMessage() : "";
+            
+            if ((message != null && message.contains("contact_number")) || (rootCause != null && rootCause.contains("contact_number"))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Phone number is already in use by another account!");
+            }
+            if ((message != null && message.contains("email")) || (rootCause != null && rootCause.contains("email"))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use by another account!");
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
      }
 
