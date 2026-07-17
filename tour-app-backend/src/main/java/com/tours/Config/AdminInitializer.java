@@ -51,6 +51,11 @@ public class AdminInitializer {
         }
 
         if (userRepo.existsByEmail(adminEmail)) {
+            Users existingAdmin = userRepo.getUserByEmail(adminEmail);
+            if (!passwordEncoder.matches(adminPassword, existingAdmin.getPassword())) {
+                existingAdmin.setPassword(passwordEncoder.encode(adminPassword));
+                userRepo.save(existingAdmin);
+            }
             return;
         }
 
