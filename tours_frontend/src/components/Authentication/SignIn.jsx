@@ -84,7 +84,8 @@ const SignIn = () => {
   }
 
   const googleLogin = () => {
-    window.open("http://localhost:8080/oauth2/authorization/google", "_self");
+    const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:8080";
+    window.open(`${baseUrl}/oauth2/authorization/google`, "_self");
   };
 
   return (
