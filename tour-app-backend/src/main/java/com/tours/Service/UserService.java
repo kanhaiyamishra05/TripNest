@@ -78,7 +78,9 @@ public class UserService {
             throw new UserNotFoundException("User not found with email: " + email);
         }
         user.setName(details.getName());
-        user.setContactNumber(details.getContactNumber());
+        if (details.getContactNumber() != null && !details.getContactNumber().trim().isEmpty()) {
+            user.setContactNumber(details.getContactNumber().trim());
+        }
         user.setPassportNumber(details.getPassportNumber());
         user.setPreferredMeal(details.getPreferredMeal());
         user.setAddress(details.getAddress());
