@@ -28,7 +28,8 @@ import Profile from "../components/Pages/UserPages/Profile";
 const Routing = () => {
   return (
     <Routes>
-      <Route path="/" element={<SignIn />}></Route>
+      <Route path="/" element={<UserDashboard />}></Route>
+      <Route path="/login" element={<SignIn />}></Route>
       <Route path="/authSuccess" element={<AuthSuccess />}></Route>
       <Route path="/SignUp" element={<SignUp />}></Route>
       <Route path="/terms-of-service" element={<TermsOfService />}></Route>
@@ -134,12 +135,12 @@ const Routing = () => {
 
       <Route
         path="/user/dashboard"
-        element={<ProtectedRoute element={UserDashboard} loginPath="/" />}
+        element={<UserDashboard />}
       ></Route>
 
       <Route
         path="/user/tour/:tourId"
-        element={<ProtectedRoute element={UserTourDetails} loginPath="/" />}
+        element={<UserTourDetails />}
       ></Route>
 
       <Route

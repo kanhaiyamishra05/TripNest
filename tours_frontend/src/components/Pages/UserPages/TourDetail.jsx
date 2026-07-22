@@ -196,6 +196,8 @@ const UserTourDetails = () => {
     };
 
     const checkWishlist = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
       try {
         const response = await dispatch(fetchWishlist()).unwrap();
         const inWishlist = response.some((t) => String(t.id) === String(tourId));
@@ -211,6 +213,12 @@ const UserTourDetails = () => {
   }, [tourId, dispatch]);
 
   const handleWishlistToggle = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please Sign In first to save items to your wishlist.");
+      navigate("/login");
+      return;
+    }
     try {
       const response = await dispatch(toggleWishlist(tourId)).unwrap();
       setIsInWishlist(response.isAdded);
@@ -223,6 +231,12 @@ const UserTourDetails = () => {
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please Sign In first to submit a review.");
+      navigate("/login");
+      return;
+    }
     if (!userComment.trim()) { toast.error("Please enter a comment"); return; }
     setSubmittingReview(true);
     try {

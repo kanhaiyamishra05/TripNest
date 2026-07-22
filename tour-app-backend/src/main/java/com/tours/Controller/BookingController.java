@@ -55,6 +55,32 @@ public class BookingController {
         return userRepo.getUserByEmail(userDetails.getUsername());
     }
 
+    @Operation(summary = "Get all available tours publicly", description = "Fetches all tours without authentication.")
+    @GetMapping("public/tours")
+    public ResponseEntity<?> getAllToursPublic() {
+        List<Tour> tours = tourService.getAllToursWithDetails();
+        for (Tour tour : tours) {
+            tour.setBookingsThisWeek(bookingService.getBookingsCountThisWeek(tour.getId()));
+        }
+        return ResponseEntity.ok(Map.of(
+                "availableTours", tours
+        ));
+    }
+
+    @Operation(summary = "Get tour by ID publicly", description = "Fetches details of a specific tour by its ID without authentication.")
+    @GetMapping("public/tours/{id}")
+    public ResponseEntity<?> getTourByIdPublic(@PathVariable Long id) {
+        return tourService.getTourById(id)
+                .map(tour -> {
+                    tour.setBookingsThisWeek(bookingService.getBookingsCountThisWeek(tour.getId()));
+                    return ResponseEntity.ok(Map.of(
+                            "tourDetails", tour
+                    ));
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "Tour not found with ID: " + id)));
+    }
+
     @Operation(summary = "Get all available tours", description = "Fetches all tours available for booking.")
     @GetMapping("customer/tours")
     @PreAuthorize("hasRole('CUSTOMER')")

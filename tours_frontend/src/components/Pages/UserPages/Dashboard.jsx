@@ -130,7 +130,15 @@ const UserDashboard = () => {
   };
 
   const handleViewDetails = (tourId) => navigate(`/user/tour/${tourId}`);
-  const handleBookTour = (tour) => setSelectedTour(tour);
+  const handleBookTour = (tour) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please Sign In first to book a tour package.");
+      navigate("/login");
+      return;
+    }
+    setSelectedTour(tour);
+  };
   const handleCloseModal = () => setSelectedTour(null);
 
   const handleQuickExplore = (destinationName) => {

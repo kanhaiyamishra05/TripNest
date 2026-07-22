@@ -289,14 +289,9 @@ export const bookDetails = createAsyncThunk("bookDetails", async (tourId) => {
 export const userTours = createAsyncThunk("userTours", async () => {
   try {
     const token = localStorage.getItem("token");
-    if (!token) {
-      return;
-    }
-    const response = await axios.get(`${baseUrl}/customer/tours`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const url = token ? `${baseUrl}/customer/tours` : `${baseUrl}/public/tours`;
+    const response = await axios.get(url, { headers });
     return response;
   } catch (error) {
     return error;
@@ -309,17 +304,12 @@ export const UserTourDetail = createAsyncThunk(
   async (tourId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        return;
-      }
-      const response = await axios.get(`${baseUrl}/customer/tours/${tourId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const url = token ? `${baseUrl}/customer/tours/${tourId}` : `${baseUrl}/public/tours/${tourId}`;
+      const response = await axios.get(url, { headers });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response ? error.response.data : error.message);
     }
   }
 );

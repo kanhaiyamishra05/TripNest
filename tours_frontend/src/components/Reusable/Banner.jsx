@@ -590,6 +590,16 @@ const Header = () => {
             )}
           </button>
 
+          {/* ── Sign In Button (when not logged in) ── */}
+          {!showDropdown && (
+            <button
+              onClick={() => navigate("/login")}
+              className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold transition-all shadow-md active:scale-95"
+            >
+              Sign In
+            </button>
+          )}
+
           {/* ── User / Admin Dropdown ── */}
           {showDropdown && (
             <div ref={dropdownRef} className="relative">
