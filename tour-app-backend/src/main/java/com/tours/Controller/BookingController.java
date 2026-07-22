@@ -70,15 +70,17 @@ public class BookingController {
     @Operation(summary = "Get tour by ID publicly", description = "Fetches details of a specific tour by its ID without authentication.")
     @GetMapping("public/tours/{id}")
     public ResponseEntity<?> getTourByIdPublic(@PathVariable Long id) {
-        return tourService.getTourById(id)
-                .map(tour -> {
-                    tour.setBookingsThisWeek(bookingService.getBookingsCountThisWeek(tour.getId()));
-                    return ResponseEntity.ok(Map.of(
-                            "tourDetails", tour
-                    ));
-                })
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("message", "Tour not found with ID: " + id)));
+        java.util.Optional<Tour> optionalTour = tourService.getTourById(id);
+        if (optionalTour.isPresent()) {
+            Tour tour = optionalTour.get();
+            tour.setBookingsThisWeek(bookingService.getBookingsCountThisWeek(tour.getId()));
+            return ResponseEntity.ok(Map.of(
+                    "tourDetails", tour
+            ));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Tour not found with ID: " + id));
+        }
     }
 
     @Operation(summary = "Get all available tours", description = "Fetches all tours available for booking.")
